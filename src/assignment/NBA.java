@@ -34,34 +34,47 @@ public class NBA {
          // file store teams player
          String TeamFile="C:\\Users\\ONG KAI YIN\\Desktop\\team.txt";
          
-         
+         // read the  agent market file
          try {
              BufferedReader br = new BufferedReader(new FileReader(File));
              String r;
              String [] read;
              
-             // check whethere got player added
-             int check=0;
+             // check whether got player added
+             boolean check=false;
              
+             // use fo rewrite data
              int count=0;
              
              while((r=br.readLine())!=null){
-                 read=r.split(" ");
-                 Player player = new Player(read[0],Integer.parseInt(read[1]),Double.parseDouble(read[2]),Double.parseDouble(read[3]),read[4],Integer.parseInt(read[5]));
+                 read=r.split(",");
+                 Player player = new Player(read[0],Integer.parseInt(read[1]),Double.parseDouble(read[2]),Double.parseDouble(read[3]),read[4],Integer.parseInt(read[5]),Double.parseDouble(read[6]),Double.parseDouble(read[7]),Double.parseDouble(read[8]),Double.parseDouble(read[9]),Double.parseDouble(read[10]));
+                 
+                 // if found the name on market then just put it on team file
                  if(read[0].equals(name)){
                      AppendData(player.toString(),TeamFile);
-                     check++;
+                     
+                     // means the player added succesfully
+                     check=true;
                  }else{
+                     
+                     // rewrite player at agent market file
                     if(count==0){
                        RewriteData(player.toString(),File);
                        count++;
                     }else{
+                        
+                        // append player at agent market file
                         AppendData(player.toString(),File);
                     }
                  }
              }
              
-             System.out.println(Check(check));
+            if(check){
+                System.out.println(name+" successfully added to team");
+            }else{
+                System.out.println(name+" is not found ");
+            }
              printTeam();
              br.close();
              
@@ -72,16 +85,10 @@ public class NBA {
          
     }
     
-    public static String Check(int check){
-        if(check>0){
-          return "Player is found and succesffuly added to the team";
-        }else{
-           return "Player is not found";
-        }
-    }
+   
     
     
-    public static void Delete(String name){
+    public static void deletePlayer(String name){
         
         // file store NBA players at agent market
          String File="C:\\Users\\ONG KAI YIN\\Desktop\\Players.txt";
@@ -93,23 +100,44 @@ public class NBA {
              BufferedReader br = new BufferedReader(new FileReader(TeamFile));
              String r;
              String read[];
+             
+             // use for rewrite data
              int count=0;
              
+             // check whether player is delete
+             boolean check=false;
+             
              while((r=br.readLine())!=null){
-               read=r.split(" ");
-               Player player = new Player(read[0],Integer.parseInt(read[1]),Double.parseDouble(read[2]),Double.parseDouble(read[3]),read[4],Integer.parseInt(read[5]));
-               if(!read[0].equals(name)){
+               read=r.split(",");
+               Player player = new Player(read[0],Integer.parseInt(read[1]),Double.parseDouble(read[2]),Double.parseDouble(read[3]),read[4],Integer.parseInt(read[5]),Double.parseDouble(read[6]),Double.parseDouble(read[7]),Double.parseDouble(read[8]),Double.parseDouble(read[9]),Double.parseDouble(read[10]));
+               
+               // if the player name is not equal that we wan to delete just put rewrite into the teamfile
+               if(!read[0].equalsIgnoreCase(name)){
+                   
+                   // rewrite data in team file
                    if(count==0){
                        RewriteData(player.toString(),TeamFile);
                        count++;
                    }else{
-                       AppendData(player.toString(),TeamFile); 
+                       
+                       // append data in team file
+                       AppendData(player.toString(),TeamFile);
+                       
                    }
                    
                }else{
+                   
                    // Put back agent market file
+                   // player is delete
                   AppendData(player.toString(),File);
+                  check=true;
                }
+             }
+             
+             if(check){
+                 System.out.println(name+" is successfully removed form team ");
+             }else{
+                 System.out.println(name+" is not found in your team");
              }
              printTeam();
              br.close();
@@ -130,23 +158,25 @@ public class NBA {
         }
     }
     
+    
+    
         public static void printTeam(){
             String file="C:\\Users\\ONG KAI YIN\\Desktop\\team.txt";
             String s;
             String read[];
-            System.out.println("The latest team member :");
-            System.out.println("-".repeat(66));
-            System.out.printf("|%10s       |%5s |%10s |%10s |%10s |%7s  |\n","Name","Age","Height","Weight","Position","Salary");
-            System.out.print("-".repeat(66));
+            System.out.println("The team member :");
+            System.out.println("-".repeat(135));
+            System.out.printf("|%10s       |%5s  |%8s  |%8s  |%10s |%7s  | %7s   |%10s  |%10s  |%10s  |%10s  |\n","Name","Age","Height","Weight","Position","Salary","Points","Rebounds","Assists","Steals","Blocks");
+            System.out.print("-".repeat(135));
             System.out.println("");
 
             try{
                 BufferedReader br = new BufferedReader(new FileReader(file));
                 while((s=br.readLine())!=null){
-                    read=s.split(" ");
-                Player player = new Player(read[0],Integer.parseInt(read[1]),Double.parseDouble(read[2]),Double.parseDouble(read[3]),read[4],Integer.parseInt(read[5]));
+                    read=s.split(",");
+                Player player = new Player(read[0],Integer.parseInt(read[1]),Double.parseDouble(read[2]),Double.parseDouble(read[3]),read[4],Integer.parseInt(read[5]),Double.parseDouble(read[6]),Double.parseDouble(read[7]),Double.parseDouble(read[8]),Double.parseDouble(read[9]),Double.parseDouble(read[10]));
                     System.out.print(player.printPlayer());
-                    System.out.println("-".repeat(66));
+                    System.out.println("-".repeat(135));
                 }
                 br.close();
             }catch(IOException e){
@@ -156,6 +186,7 @@ public class NBA {
         }
     
     public static void main(String[] args) {
-        addPlayer("cc");
+        //deletePlayer("haha");
+        //addPlayer("Ali muha");
     }
 }
